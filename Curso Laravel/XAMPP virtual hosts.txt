@@ -1,0 +1,10 @@
+1.- Localizar la carpeta de instalación de XAMPP e ir a /apache/conf/extra
+2.- Abrir el archivo httpd-vhosts.conf
+3.- Agregar al final del archivo:
+	<VirtualHost *:80>
+    	DocumentRoot "C:/xampp/htdocs/nombreProyectoLaravel/public"
+    	ServerName nombreProyecto.extención
+	</VirtualHost>
+4.- Ir a la carpeta C:/Windows/System32/drivers/etc
+5.- Abrir el archivo hosts y agregar la siguiente línea al final del archivo:
+	127.0.0.1	nombreProyecto.extención

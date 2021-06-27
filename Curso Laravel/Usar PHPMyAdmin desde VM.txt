@@ -1,0 +1,21 @@
+En la VM:
+	sudo apt-get install phpmyadmin                     (no instalar apache2, ni lighttpd)
+
+
+
+En archivo Homestead.yaml 
+	folders:
+		- map: C:\Users\Yo\Documents\Laravel-Apps\phpmyadmin				(ruta en la máquina local)
+	      to: /usr/share/phpmyadmin											(ruta del PHPMyAdmin en la VM)
+
+	sites:
+		- map: phpmyadmin.diaz												(nombre, puede ser cualquiera)
+	      to: /usr/share/phpmyadmin       									(ruta del PHPMyAdmin en la VM)
+
+
+En archivo hosts de la máquina local
+	127.0.0.1	phpmyadmin.diaz
+
+
+
+Correr comando vagrant provision

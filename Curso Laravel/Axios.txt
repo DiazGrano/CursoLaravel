@@ -1,0 +1,18 @@
+Axios hace uso de las promesas (ejecución de instrucciones asíncronas), para realizar peticiones HTTP.
+Sirve para obtener datos de forma asíncrona y ejecutar instrucciones en caso de que la petición haya sido exitosa o si fue fallida.
+
+axios.get('url').then(instrucciones).catch(instrucciones)
+
+Ejemplo:
+
+El atributo 'response', pertenece a axios, es la variable que almacena la respuesta obtenida de la petición.
+axios.get(`/api/reviews/${$this.$route.params.id}`).then(response => ($this.existingReview = response.data.data));
+
+
+axios.get(`/api/bookables/${this.$bookableId}/availability?from=${this.from}&to=${this.to}`)
+	.then(response=>{this.status = response.status;})
+	.catch(error =>{if(422 === error.response.status){
+                    	this.errors = error.response.data.errors;
+                	}
+                	this.status = error.response.status;})
+    .then(() => (this.loading = false));

@@ -1,0 +1,17 @@
+FontAwesome nos sirve para poder usar íconos de una manera fácil en nuestro html.
+Para poder integrarlo a nuestro proyecto es necesario entrar a la página https://fontawesome.com/
+	Start
+		NPM
+			npm install --save @fortawesome/fontawesome-free
+			Y ejecutar ese comando en el proyecto
+
+Para poder hacer uso de esta librería globalmente, es necesario importarla en el archivo /resources/sass/app.scss
+// Font awesome
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/regular";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+
+Para poder hacer uso de este paquete, es necesario definirlo en un componente y registrar este globalmente en el archivo app.js de la siguiente manera
+	import nombreComponente from "rutaComponente";
+	Vue.component("nombre-componente", nombreComponente);
+

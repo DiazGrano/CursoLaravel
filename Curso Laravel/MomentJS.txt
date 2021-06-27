@@ -1,0 +1,17 @@
+Moment.js es un filtro, el cual nos permite dar formato a fechas.
+Los filtros sirven para modificar valores.
+
+Para instalar Moment.js es necesario ejecutar el comando
+npm install moment --save
+
+En el proyecto en el que lo queremos usar
+
+
+// Filtros
+    // Los filtros se usan para modificar un valor
+    // Este filtro de solo de uso local (en este componente).
+    // Para poder registrarlo globalmente, es necesario modificar el archivo app.js
+    filters:{
+        postDate(value){
+            return moment(value).fromNow();
+    }

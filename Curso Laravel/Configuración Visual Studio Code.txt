@@ -1,0 +1,16 @@
+﻿Bracket Pair Colorizer
+ESLint (syntax checker for JS)
+JavaScript code snippets
+Laravel blade snippets
+Laravel snippets
+npm intellisense
+Path intellisense
+PHP Intelephense
+PHP IntelliSense
+PHP Namespace Resolver
+Vetur
+Vue 3 Snippets
+
+*Temas para íconos* (para habilitarlos es de ir a File/Preferences/File icon theme)
+vscode-icons 
+Material icon theme

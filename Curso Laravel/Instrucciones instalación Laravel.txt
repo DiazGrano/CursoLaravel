@@ -1,0 +1,17 @@
+1.- Descargar e instalar XAMPP
+2.- Descargar e instalar composer (seleccionar el ejecutable de PHP)
+3.- Descargar e instalar Git Bash
+4.- (Opcional) Descargar e instalar PHPStorm
+5.- Abrir Git Bash, localizar carpeta de instalación XAMPP e ir a/htdocs
+6.- Ejecutar el comando 'composer create-project laravel/laravel nombreProyecto --prefer-dist' para crear un nuevo proyecto
+7.- Localizar la carpeta de instalación de XAMPP e ir a /apache/conf/extra
+8.- Abrir el archivo httpd-vhosts.conf
+9.- Agregar al final del archivo:
+	<VirtualHost *:80>
+    	DocumentRoot "C:/xampp/htdocs/nombreProyectoLaravel/public"
+    	ServerName nombreProyecto.extención
+	</VirtualHost>
+10.- Ir a la carpeta C:/Windows/System32/drivers/etc
+11.- Abrir el archivo hosts y agregar la siguiente línea al final del archivo:
+	127.0.0.1	nombreProyecto.extención
+12.- (opcional) configurar los datos de la base de datos a usar, esto es en el archivo .env del proyecto

@@ -1,0 +1,8 @@
+#### descargar paquetes para hacer uso de la UI de Laravel
+composer require laravel/ui
+
+### Usar la autenticación con bootstrap
+php artisan ui bootstrap --auth
+
+### Compilar
+npm install && npm run dev

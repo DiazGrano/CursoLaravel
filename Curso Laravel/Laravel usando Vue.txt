@@ -1,0 +1,11 @@
+########Instalación (para poder hacer uso de Vue, es necesario tener instalado NodeJS)
+
+C:\xampp\htdocs>composer create-project --prefer-dist laravel/laravel nombreProyecto
+composer require laravel/ui --dev
+php artisan ui vue
+npm install
+npm run dev
+
+
+########Vue router
+npm install vue-router

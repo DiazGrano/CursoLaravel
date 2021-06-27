@@ -1,0 +1,30 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Font awesome
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/regular";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+
+// Vue transitions
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+}
+
+// Vue transitions
+.v-enter-active, .v-leave-active {
+    transition: opacity 0.2s;
+}
+.v-enter, .v-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+}

@@ -1,0 +1,56 @@
+1.- Descargar VirtualBox e instalar
+
+2.- Descargar Git e instalar
+
+3.- Descargar Vagrant e instalar
+
+4.- Abrir Git Bash
+
+5.- Escribir el comando 
+	vagrant box add laravel/homestead
+
+6.- Seleccionar la máquina virtual deseada
+
+7.- Crear una carpeta para contemer ñps archivos necesarios para Homestead
+
+8.- Ingresar a la ruta de la carpta desde Git Bash
+
+9.- Escribir el siguiente comando en Git Bash 
+	git clone https://github.com/laravel/homestead.git Homestead
+
+10.- En Git Bash, dentro de la carpeta de Homestead, ejecutar el comando 
+	bash init.sh
+
+11.- En Git Bash, ejecutar el siguiente comando dentro de la carpeta de Homestead, para crear las llaves shh 
+	ssh-keygen -t rsa -C "you@homestead"
+
+12.- Al ejecutar el anterior comando pedirá una ruta para guardar la llave, se puede dejar la ruta por defecto o cambiarla a la que deseemos, si se cambia, se deberá también cambiar la ruta en el archivo "Homestead.yaml", en la sección "authorize:" y "keys:"
+
+13.- Luego pedirá una passphrase, esta se puede dejar en blanco
+
+14.- Abrir el archivo "Homestead.yaml" con un editor de texto, el cual se crea al ejecutar el comando del paso anterior, este archivo es creado en la misma carpeta de Homestead.
+
+15.- En la sección "- map:", de "folders:", es la ruta de la carpeta de la pc host que deseamos mapear a la VM. La sección "to:", es la ruta en la que se guardarán los archivos de la carpeta que mapeamos.
+
+16.- En la sección "- map:", de "sites:", es el nombre del sitio que deseas crear, ejemplo: "ejemplo.test". La sección "to:", es la ruta en la que se guardará nuestro sitio, la ruta debe ser la misma de la sección "to:" de "folders:", con el agregado del nombre de nuestro sition (sin el punto y lo que sigue), y diagonal public, ejemplo: "/home/vagrant/code/ejemplo/public"
+
+17.- Ir a la carpeta de Windows "C:\Windows\System32\drivers\etc", y abrir con un editor de texto el archivo "hosts".
+
+18.- Dentro del archivo host, hasta abajo del documento vamos a agregar la ip "127.0.0.1", luego se presiona la tecla tab para dejar espacio y escribimos el nombre completo de nuestro sitio, ejemplo "127.0.0.1	ejemplo.test"
+
+19.- En Git Bash, dentro de la carpeta "Homestead", escribir el comando 
+	vagrant up
+Para iniciar la VM. (Si muestra errores con algo relacionado al adaptador de red, ir a los adaptadores de red de nuestra pc en el panel de control, se habrán agregado dos nuevos relacionados de la VM, abrir sus propiedades y verificar que la casilla "VirtualBox NDIS6 Bridged Networking Driver" esté marcada y luego deshabilitaremos y habilitaremos los adaptadores de red varias veces, este debería solucionarlo).
+
+20.- Una vez que la VM haya sido iniciada correctamente, en Git Bash escribiremos el comando
+	vagrant ssh
+Para conectarlos a la VM, allí verificaremos que la carpeta "code" haya sido creada, para ver las carpetas se usa el comando
+	ls
+
+21.- En Git Bash, dentro de la VM  y dentro de la carpeta "code", escribiremos el siguiente comando para instalar Laravel
+	composer global require laravel/installer
+
+22.- En Git Bash, dentro de la VM y dentro de la carpeta "code", para poder crear un nuevo proyecto de Laravel, se usa el siguiente comando, donde "ejemplo" es el nombre del sitio (sin el punto y lo que sigue de este) que escribimos en el archivo "Homestead.yaml"
+	laravel new ejemplo
+
+23.- Para acceder a este sitio desde el navegador, tenemos que escribir en el navegador el nombre completo del sitio y el puerto 8000, ejemplo: "ejemplo.test:8000"

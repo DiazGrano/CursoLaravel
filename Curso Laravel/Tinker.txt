@@ -1,0 +1,7 @@
++++++++++++++++++++++++++++ Tinker +++++++++++++++++++++++++++
+// Tinker ayuda a manejar la base de datos de una manera sencilla, como cuando se busca hacer
+// pruebas. Es como una consola en la que puedes ingresar las líneas de código que
+// usarías en una ruta o modelo para manejar registros, pero directamente, sin intervención del
+// explorador de internet o algo así.
+// Los comandos como Find, Where, Delete, Update, etc, funcionan.
+// Se accede a Tinker desde la carpeta del proyecto de Laravel, con el comando 'php artisan tinker'

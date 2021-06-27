@@ -1,0 +1,126 @@
+// Vuex sirve para almacenar valores de forma temporal en la sesión, por ejemplo, para guardar 
+// para guardar la última fecha que el usuario buscó.
+
+//Se instala usando el comando 
+npm install vuex --save
+
+// Para poder usarlo, es necesario importarlo en el archivo app.js (/public/resources/app.js)
+import Vuex from "vuex";
+Vue.use(Vuex);
+
+// Para poder hacer uso de la store, es necesario definirla en su propio archivo, por lo que se creará
+// En este caso el nombre del archivo será store.js, que estará alojado en /public/resources/
+// En este archivo se definirán las variables que serán almacenadas y los métodos que servirán
+// para modificar estas. Las variables no deben ser modificadas directamene.
+export default{
+    state: {
+        count: 0,
+        name: "Miguel"
+    },
+    mutations:{
+        increment(state){
+            state.count++;
+        },
+        changeName(state, payload){
+            state.name = payload;
+        }
+    }
+}
+
+// Para poder hacer uso de esta store, es necesario importarla en el archivo app.js
+import storeDefinition from "./store";
+
+// Y también crear su objeto, para poder usarla
+const store = new Vuex.Store(storeDefinition);
+
+// También debe ser especificado que se va a usar en Vue
+const app = new Vue({
+    el: '#app',
+    // Se indica que se debe hacer uso de la store
+    store,
+    // Se indica que se debe hacer uso del router
+    router,
+    // Registrar componentes localmente
+    components: {
+        "index": index,
+    }
+});
+
+// Para poder hacer uso de los métodos que se definieron, estos se llaman de la siguiente forma
+// Si no necesita parámetros
+store.commit('increment'); 
+
+// Si necesita parámetros 
+store.commit('changeName', 'Luis');
+
+
+#################### Actions ######################
+// Se definen en la store.js
+// Son similares a las mutations, pero la diferencia es que en vez de mutar el state, 
+// las actions commit las mutations y que las actions pueden contener operaciones asíncronas arbitrarias.
+    actions:{
+        setLastSearch(context, payload){
+            context.commit('setLastSearch', payload);
+            // El localStorage nos sirve para guardar información de forma local, es como una pequeña base
+            // de datos local. 
+            // JSON.stringify sirve para transformar en algo leíble y accesible un objeto
+            localStorage.setItem('lastSearch', JSON.stringify(payload));
+        }
+    }
+
+// Y se usan/llaman de la siguiente manera
+    this.$store.dispatch('setLastSearch',{
+                from: this.from,
+                to: this.to
+    });
+
+// Para usar los datos que se almacenaron de forma local en la localStorage, se hace de la siguiente manera
+// en la store.js es necesario tener definido un método que maneje
+    loadStoredState(context){
+        const lastSearch = localStorage.getItem('lastSearch');
+        if(lastSearch){
+            context.commit('setLastSearch', JSON.parse(lastSearch));
+        }
+    }
+
+// La instancia de Vue (en app.js) es un buen lugar para manejar los datos almacenados localmente
+    const app = new Vue({
+        el: '#app',
+        store,
+        router,
+        components: {
+            "index": index,
+        },
+
+        // Usando el life cicle de Vue, se puede llamar para ejecutar el método inmediatamente.
+        // Si estos datos se lee en el backend, podría ser más lento
+        beforeCreate(){
+            this.$store.dispatch("loadStoredState");
+        }
+    });
+
+
+// mapState sirve para poder actualizar automáticamente los datos almacenados en la store de vuex. Dado que estos
+// no son actualizados automáticamente entre componentes.
+import { mapState } from 'vuex';
+export default {
+
+    // Así se define
+    /*
+    computed: mapState({
+        // Este es lo mismo que el de abajo
+        //lastSearchComputed: state => state.lastSearch
+        lastSearchComputed: "lastSearch"
+    })*/
+
+    // Si se desea también hacer uso de otras variables computadas, es necesario definir el mapa de la siguiente manera
+    computed: {
+    ... mapState({
+        lastSearchComputed: "lastSearch"
+    }),
+
+    otroComputado(){
+        return 3+2;
+    }
+    }
+};

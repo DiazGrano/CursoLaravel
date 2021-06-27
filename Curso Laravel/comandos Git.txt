@@ -1,0 +1,88 @@
+Lo que hice en clase
+
+cd c:
+
+mkdir repositorio-codigo
+
+cd repositorio-codigo
+
+git clone .....            (ir a https://bitbucket.org/mikelemus/mgl-proyecto-sis-op)
+
+ls                      (copiar lo que sale)
+
+cd                  (pegar lo que salió)
+
+git checkout sis-op-2016b
+
+mkdir Luis-Díaz
+
+cd Luis-Díaz
+
+vim primerCommit.txt                          
+i
+Hola :B                                                 
+Esc
+:w
+:q
+
+git push origin sis-op-2016b
+
+
+
+
+Git no se hizo para Windows, por lo que se usa MingW para virtualizar Linux, le hace creer a Git que está en Linux
+
+ls                                                              Muestra las carpetas que hay 
+
+cd "ruta"                                                       Te mueve a la ruta que deseas (sin comillas)
+
+pwd                                                             Te muestra la ruta en que  estás
+ 
+mkdir   "nombre de carpeta"                                     Crea carpeta (sin comillas)
+
+git checkout   "nombre"                                         Crea rama (copia)  (sin comillas)
+
+vim "nombrearchivo.txt"                                         Crea archivo .txt  (sin comillas)
+i
+"escribe"                                                       (sin comillas)
+Esc
+:w                                                              Guardar
+:q                                                              Salir
+
+git add "nombre archivo"                                        Guardar cambios (sin comillas)
+
+git commit -a -m "mensaje"                                      Crea puntos de restauración  (con comillas)
+
+git push origin "nombre carpeta"                                Sube el archivo (sin comillas)
+
+git pull origin "nombre carpeta"                                Termina a quien esté subiendo (sin comillas)
+Esc
+:q
+
+git status                                                      Muestra el status   (si sale algo en rojo, no se ha ejecutado el comando git add... Si sale en verde, no se ha hecho el git commit...)
+
+mv "nombre actual"/ "nuevo nombre"                              Cambia el nombre de archivo  
+
+
+
+-------------------------------- Agregar proyecto existente a repositorio ------------------------------
+// Para agregar un proyecto a un repositorio y hacer uso de este, es necesario primero crear 
+// el repositorio al que lo agregaremos, esto en GitHub, una vez creado, es necesario ejecutar los siguientes
+// comandos
+git init
+git add .
+git commit -m "mensaje"
+git remote add origin https://github.com/usuario/repositorio.git
+git push -u origin master
+
+
+--------------------------------Subiendo un archivo-------------------------------
+Ya hechas las modificaciones, creaciones, etc, de archivos, se debe de hacer:
+1.- git add "nombre archivo"
+2.- git commit -a -m "mensaje" 
+3.- git pull origin "nombre carpeta"
+4.- git push origin "nombre carpeta"
+
+
+-------------------------------
+vim "nombrearchivo"

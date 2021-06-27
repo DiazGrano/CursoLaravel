@@ -1,0 +1,16 @@
+#### descargar paquetes para hacer uso de la UI de Laravel
+composer require laravel/ui
+
+### scaffolding
+// usar bootstrap
+php artisan ui bootstrap
+// usar vue
+php artisan ui vue
+// usar react
+php artisan ui react
+
+### Ejecutar NPM
+npm install && npm run dev
+
+### Hacer referencia (importar) a bootstrap (la función 'asset()', siempre hace referencia a la carpeta 'public')
+<link rel="stylesheet" href="{{asset('css/app.css')}}">

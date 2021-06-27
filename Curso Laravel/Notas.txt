@@ -1,0 +1,977 @@
++++++++++++++++++++++ etc +++++++++++++++++++++++++
+
+// Un modelo es una clase que interactúa con la base de datos
+
+// Crear nuevo proyecto de Laravel
+composer create-project laravel/laravel nombreProyecto --prefer-dist
+
+// Significa que el método es estático
+::
+
+// "Aparta" el nombre de la clase en el proyecto, para que este no sea repetido.
+namespace rutaClase
+
+// Importa la clase deseada, para poder ser usada en la presente clase.
+use rutaClase
+
+
+// Blade, sirve para hacer referencia a un recurso que está dentro de la carpeta public
+{{asset('ruta/asset')}}
+
++++++++++++++++++++++ Rutas +++++++++++++++++++++++++
+// Las rutas se encuentran en "/router/web.php"
+
+// Retornar vista
+Route::get('/url', function(){
+	// Redirecciona a la vista seleccionada
+	// Las vistas se encuentan en "/resources/views/""
+	// En este caso estaría así "/resources/views/nombreVista.blade.php"
+	return view('nombreVista')	
+});
+
+
+// Pasar parámetros a través del url para usarlo en el código
+Route::get('/url/{variable1}/{variable2}', function($variable1, $variable2){
+	echo $variable1 . "<br>" . $variable2;
+});
+
+
+// Nombrar ruta
+Route::get('/url', array('as' => 'nombreRutaDeseado', function(){
+	$nombreRuta = route('nombreRutaDeseado')
+	return $nombreRuta;
+}));
+
+// Redireccionar a método en controlador
+Route::get('/url', 'NombreControlador@NombreMétodo');
+
+// Pasar parámetros a través del url hacia un método en un controlador.
+Route::get('/url/{variable}', 'NombreControlador@MetodoEjemplo')
+	// - En el método dentro del controlador -
+	public function MetodoEjemplo($variable){
+		return $variable;
+	}
+
+
+// Crea rutas automáticamente para los recursos de un controlador, estas rutas pueden ser vista en
+// la lista de rutas en Artisan (ver la lista de comandos de Artisan).
+Route::resource('/url', 'NombreControlador');
+
+
+
+++++++++++++++++++++++ Controladores ++++++++++++++++++++++++++++
+// Los controladores se encuentran en "/app/Http/Controllers/Controller.php". Estos podrían ser considerados como clases.
+// Para poder crear un controlador desde la consola, se puede usar un comando de Artisan (ver comandos Artisan).
+
+// Una vez creado un controllador, se puede acceder a los métodos de este con una ruta.
+// Esto nos redireccionará al método del controlador.
+Route::get('/url', 'NombreControlador@NombreMétodo');
+
+
+
++++++++++++++++++++++ Comandos Artisan ++++++++++++++++++++++++++
+// Pasos para hacer uso de los comandos:
+/*
+	1.- En Git Bash, dentro de la carpeta de Homestead
+	2.- Ingresar el comando "vagrant up"
+	3.- Ingresar el comando "vagrant ssh"
+	4.- Ingresar a la carpeta del proyecto
+*/
+
+// Muestra la lista de comandos disponibles en Artisan
+php artisan
+
+// Muestra la lista de las rutas existentes
+php artisan route:list
+
+// Crea controlador
+php artisan make:controller NombreControlador
+
+// Crea controlador con recursos CRUD
+php artisan make:controller --resource NombreControlador
+
+// Realiza una migración
+php artisan migrate
+
+// Crear modelos (se le agrega un -m si se desea crear una migración)
+php artisan make:model NombreModelo
+
+++++++++++++++++++ Views ++++++++++++++++++++++++
+// Las vistas se encuentran en "resources/views/", estas deben ser llamadas de la siguiente forma "nombreVista.blade.php",
+// se usa el sufijo ".blade", para que se haga uso de la plantilla de Laravel especial para vistas, la cual permite hacer
+// uso del lenguaje de PHP de una forma sencilla.
+
+// Las vistas son lo que se muestra al usuario
+
+// Para redireccionar hacia una vista, es necesario crear en el controlador deseado un método que haga referencia a esta:
+
+public function nombreMétodo(){
+	return vew('nombreVista'); // No es necesario agregar ".blade.php", sólo el nombre
+}
+
+// La función "view('nombreVista')", busca automáticamente en el directorio "resources/views/" un archivo con el nombre
+// de la vista, pero si la vista se encuentra dentro de una carpeta dentro del directorio "resources/views", sólo se tiene
+// que agregar antes del nombre de la vista un "nombreCarpeta.", ejemplo: "nombreCarpeta.nombreVista"
+
+// Y una ruta que llame al método:
+
+Route::get('/url', 'nombreControlador@nombreMétodo')
+
+
+// Pasar parámetros a vista
+// Para poder pasar parámetros a una vista, es necesario definir en el método del controlador que hace referencia
+// a la vista, las variables que serán pasadas a la vista
+
+public function($variable){
+	return view('nombreVista')->with('nombreVariable', $variable);
+}
+
+// Otro método para pasar parámetros a la vista es:
+
+public function($variable){
+	return view('nombreVista', compact('variable')); // De este modo se pasa la variable con el mismo nombre, para pasar
+													 // más parámetros, sólo es necesario agregar una coma entre variables
+}
+
+// Y para hacer uso de esta variable en la vista, sólo es necesario escribir "$nombreVariable"
+
+
+
+
+++++++++++++++++++++++++++ Blade template engine ++++++++++++++++++++++++++++++
+// Blade permite simplificar "ser más limpio" en el código de las vistas
+// Funciona como una clase de la que se pueden heredar estructuras, "plantillas"
+
+// Para crear una plantilla de Blade, es necesario crear un archivo en el directorio "resources/views/", de la siguiente
+// manera "nombreArchivo.blade.php", en este archivo podemos crear una plantilla de una página web de la cual podemos
+// heredar su estructura o acceder a sus secciones. Para esto es necesario escribir en la vista en donde queremos hacer
+// uso de la estructura de la plantilla "@extends('nombrePlantilla')" (si la plantilla está dentro de otra carpeta, sólo
+// se tiene que agregar "extends(nombreCarpeta.nombrePlantilla)").
+
+// Para definir las secciones a usar en la plantilla de Blade, es necesario escribir dentro de la sección deseada
+// "@yield('nombreSección')", a ese nombre se hará referencia en la vista que queramos. Para poder hacer uso de una sección
+// de la plantilla, es necesario escribir en la vista en donde querermos hacer uso de la sección de la plantilla 
+// "@section('nombreSección')" y terminar su uso con "@stop". Para poder hacer uso de una sección de una plantilla, es
+// necesario primero heredar la estructura de la plantilla con "@extends('nombrePlantilla')".
+
+// echo
+{{'datos'}}
+{{$variable}}
+
+// Condicional if
+@if(condicion)
+@endif
+
+// Ciclo foreach
+@foreach($nombreArray as $nombreVariable)
+@endforeach
+
+// Importar/hacer referencia a un archivo .blade.php, esta función siempre hace referencia a la carpeta 'views'
+@include('ruta.etc')
+
+
+++++++++++++++++++++ Migrations +++++++++++++++++++
+// Para realizar una migración, se usa el comando
+php artisan migrate
+
+// Para crear un archivo de migración para crear una tabla, se usa el comando
+php artisan make:migration nombre_archivo_migración --create="nombreTabla"
+
+// Para crear un archivo de migración para hacer modificaciones en una tabla ya creada, se usa el comando
+php artisan make:migration nombre_archivo_migración --table="nombreTabla"
+
+// Deshace la última migración realizada
+php artisan migrate:rollback
+
+// Deshace todas las migraciones realizadas
+php artisan migrate:reset
+
+// Deshace todas las migraciones realizadas y las vuelve a realizar
+php artisan migrate:refresh
+
+// Muestra el estado de las migraciones creadas
+php artisan migrate:status
+
+// Crear tabla en la clase de una migración
+	public function up(){
+	    Schema::create('nombre_tabla', function (Blueprint $table) {
+	        $table->tipoDatoColumna('nombre_columna');
+	    });
+	}
+
+	public function down(){
+	    Schema::dropIfExists('nombre_tabla');
+	}
+
+// Para agregar una columna a una tabla que ya existe en la clase de una migración
+	public function up(){
+		Schema::table('nombre_tabla_existente', function(Blueprint $table){
+			$table->tipoDatoColumna('nombre_columna');
+		});
+	}
+
+	public function down() {
+	    Schema::table('nombre_tabla_existente', function (Blueprint $table) {
+	        $table->dropColumn('nombre_columna');
+	    });
+	}
+
+// Para crear una columna que usará softdeletes para registrar la fecha de la eliminación, se debe agregar la columna a la tabla
+// en la clase de la migración de la siguiente forma, el nombre de la tabla se puede dejar en blanco, tomará por defecto el nombre
+// 'deleted_at'
+$table->softDeletes('nombre_columna');
+
+
+
++++++++++++++++++++++++ Database ++++++++++++++++++++
+// Para ejecutar comandos puros de SQL se puede usar la fachada/clase (fecade) "DB", la cual 
+// brinda métodos para la ejecución de diferentes tipos de sentencias, como select, insert, delete y update
+
+// DB facade insert
+DB::insert('insert into nombreTabla values (valores)');
+
+// DB facade select
+$variable = DB::select('select columna from nombreTabla');
+
+// DB facade update (este tipo de sentencia puede retornar información de lo afectado)
+DB::update('update nombreTabla set nombreColumna where nombreColumnaReferencia = ?', [valorDeReferencia]);
+
+// DB facade delete (este tipo de sentencia puede retornar información de lo afectado)
+DB::delete('delete from nombreTabla where nombreColumnaReferencia = ?', [valorDeReferencia]);
+
+// DB facade sentencia general
+DB::statement('sentencia...');
+
+
+
+
++++++++++++++++++++ Modelos +++++++++++++++++++++++++
+// Un modelo es una clase que interactúa con la base de datos.
+// Los modelos se crean en la carpeta "/app".
+
+// Para crear un modelo se usa el comando (se le puede agregar un -m para crear una migración)
+php artisan make:mode NombreModelo
+
+// Por defecto una clase modelo toma como nombre de tabla a la que hace referencia su nombre de clase en minúsculas y en 
+// plural, ej, si una clase modelo se llama "Modelo", este modelo por defecto hará referencia a una tabla en la base de datos
+// con el nombre "modelos".
+// En caso de que se cree un modelo con un nombre diferente al de la tabla en la base de datos, se tiene que agregar
+// la siguiente propiedad en el modelo deseado
+protected $table = 'nombreTabla';
+
+// Por defecto una clase modelo toma como PrimaryKey una comlumna con el nombre "id", en caso de que nuestra PrimaryKey
+// tenga un nombre diferente, se tiene que agregar la siguiente propiedad en el modelo deseado
+protected $primaryKey = 'nombreColumnaConPrimaryKey';
+
+// Para hacer referencia a un modelo, es necesario importarlo, para hacer esto hay dos opciones:
+// 1.- Usarlo como referencia dentro de un método/función de la siguiente manera
+// 	$variable = App\NombreModelo;
+
+// 2.- Importar su namespace en la parte superior de la clase en la que se desea usar 
+//	use App\NombreModelo;
+// De esta manera se puede hacer referencia al modelo de la siguiente manera
+// $variable = nombreModelo::método();
+
+// Para crear registros en masa a la base de datos (ya sea modificar más de una columna a la vez, etc), es necesario primero especificar
+// que está permitido, ya que por defecto no se permite esto. Para lograrlo es necesario agregar la siguiente propiedad en el modelo deseado
+protected $fillable = ['nombrecolumna1', ..., 'nombrecolumnaN'];
+
+
+
+
++++++++++++++++++++ Eloquent ORM (Object Relational Model) +++++++++++++++++++++++++
+// Facilita el uso de las bases de datos
+
+// Para leer registros de la base de datos, se usa 'NombreModelo::all()', para obtener todos los registros de la tabla.
+// Para poder acceder a los métodos del modelo, es necesario primero importarlo, esto se puede hacer escribiendo 
+// 'use RutaModelo\NombreModelo;', en la parte superior del archivo.
+	Route::get('/url', function(){
+	    $variable = NombreModelo::all();
+
+	    foreach ($variable as $variable2){
+	        echo $variable2;
+	    }
+
+	});
+// Otro método para obtener registros con alguna condición, es usar el método 'NombreMode::where('nombrecolumna', datoDeReferencia)->get()'.
+// Este método puede aceptar más parámetros, como condiciones.
+
+// Insertar registro en la base de datos
+$variable = new NombreModelo;
+$variable->nombrecolumna = 'datos';
+$variable->save();
+
+// Actualizar registro en la base de datos usando el método '->save()'. Para actualizar un registro usando el método '->save()', 
+// primero es necesario encontrarlo.
+$variable = NombreModelo::find(datoDeReferencia);
+$variable->nombrecolumna = 'nuevoDato';
+$variable->save();
+
+// Para crear registros en masa a la base de datos (ya sea modificar más de una columna a la vez, etc), es necesario primero especificar
+// que está permitido, ya que por defecto no se permite esto. Para lograrlo es necesario agregar la siguiente propiedad en el modelo deseado
+$protected $fillable = ['nombrecolumna1', ..., 'nombrecolumnaN'];
+
+// Crear registro
+NombreModelo::create(['nombrecolumna1'=>'datos', ... => ..., 'nombrecolumnaN' => 'datos']);
+
+// Actualizar registro. Para actualizar un registro, es necesario primero encontrarlo.
+NombreModelo::where('nombrecolumna', datoDeReferencia)->update(['nombrecolumna'=>'datos', ... => ..., 'nombrecolumnaN'=>'datos']);
+
+// Borrar registro de tabla. Para borrar un registro, es necesario primero encontrarlo.
+$variable = NombreModelo::find(datoDeReferencia);
+$variable->delete();
+
+// Borra registro de tabla.
+NombreModelo::destroy(datoDeReferencia);
+
+
+#################### Métodos útiles #########################
+// Obtiene los datos en formato string
+get();
+
+// Obtiene todos los registros de la tabla a la que hace referencia el modelo.
+::all();
+
+// Obtiene el registro que coincida con el dato de referencia en la columna especificada. El método 'where()' puede ser concatenado con otros
+// métodos 'where()', esto hace un operador AND, ej, where('id', 1)->where('name', 'pedro');
+where('nombrecolumna', datoDeReferencia)->get();
+where('nombreColumna', condición (aquí pueden ir operadores como > o <, etc), datoDeReferencia)-get();
+
+// Manda una excepción en caso de que no se encuentre el registro con el dato de referencia.
+findOrFail(datoDeReferencia);
+
+// En caso de que se encuentren más de un registro, obtiene el primer registro encontrado o manda una excepción en caso de que no se haya
+// encontrado ningún registro
+firstOrFail();
+
+// Inserta o actualiza el registro en la base de datos.
+save();
+
+// Actualizar registro
+update(['nombrecolumna'=>'datos', ... => ..., 'nombrecolumnaN'=>'datos']);
+
+// Borra registro de la tabla
+delete();
+
+// Borra registro de tabla, este método puede aceptar múltiples parámetros en forma de un array.
+destroy(datoDeReferencia);
+destroy([datoDeReferencia1, ..., datoDeReferenciaN]);
+
+// Para incluir registros de la tabla que hayan sido eliminados con softdeletes, es necesario agregar el siguiente método
+NombreModelo::withTrashed()
+
+// Para leer solo registros de la tabla que hayan sido eliminados con softdeletes, es necesario agregar el siguiente método
+NombreModelo::onlyTrashed()
+
+// Para restaurar registros que hayan sido eliminados con softdeletes, es necesario primero encontrar el registro que se desea
+// restaurar y agregar el siguiente método
+restore();
+
+// Para eliminar registro permanentemente, es necesario primero encontrar el registro que se desea eliminar y usar el siguiente 
+// método
+forceDelete();
+
+
+
+########################## Soft deleting / Trashing ############################
+// Para usar este modo, es necesario importar la clase 'SoftDeletes' en la clase del modelo en el que se desea usar.
+// Para esto, se usa la siguiente línea de código
+use Illuminate\Database\Eloquent\SoftDeletes;
+// Y también se usa lo siguiente dentro de la clase
+use SoftDeletes;
+// También es necesario agregar la siguiente propiedad en la clase del modelo en el que se desea usar
+protected $date = ['nombreColumna']
+// En esta columna se almacenará la fecha en la que el registro se 'eliminó' usando soft delete. Esta columna debe existir en la 
+// tabla del modelo deseado.
+// Para crear la columna que usará softdeletes para registrar la fecha de la eliminación, se debe agregar la columna a la tabla
+// en la clase de la migración de la siguiente forma, el nombre de la tabla se puede dejar en blanco, tomará por defecto el nombre
+// 'deleted_at'
+$table->softDeletes('nombre_columna');
+
+// Para incluir registros de la tabla que hayan sido eliminados con softdeletes, es necesario agregar el siguiente método
+NombreModelo::withTrashed()
+
+// Para leer solo registros de la tabla que hayan sido eliminados con softdeletes, es necesario agregar el siguiente método
+NombreModelo::onlyTrashed()
+
+// Para restaurar registros que hayan sido eliminados con softdeletes, es necesario primero encontrar el registro que se desea
+// restaurar y agregar el siguiente método
+restore();
+
+// Para eliminar registro permanentemente, es necesario primero encontrar el registro que se desea eliminar y usar el siguiente 
+// método
+forceDelete();
+
+
+
+
+################### ELOQUENT Relaciones #########################
+// Ayuda a simplificar la obtención de registros de la base de datos.
+// Para poder hacer uso de las relaciones entre las tablas de la base de datos con ELOQUENT, es necesario que
+// la columna de referencia (primary key) exista en ambas tablas, ejemplo, si se quiere obtener los registros de una tabla2
+// que tengan relación con una tabla1, es necesario que en la tabla2 exista la columna de primary key de la tabla1, suponiendo
+// que la columna primary key de la tabla1 es llamada 'id', en la tabla2 debe existir una columna con el nombre 'tabla1_id',
+// en otras palabras, se toma el nombre de la tabla desde la cual se tomará el dato de referencia, se le agrega un '_' y el nombre
+// de la columna de referencia.
+// Esto es por si se desea usar la funcionalidad por defecto. 
+// Se crea una función en el modelo de la tabla desde la cual se tomará el dato de referencia.
+
+// Relación uno a uno
+public function nombreFunción(){
+	return $this->hasOne('URLModeloConElQueSeTieneRelacion\NombreModelo');
+}
+//Si se desean usar nombres de columnas diferentes, esto es especificado, los dos otros parámetros son opcionales
+public function nombreFunción(){
+	return $this->hasOne('URLModeloDeTablaForánea\NombreModelo', 'nombre_columna_tabla_foránea', 'nombre_columna_tabla_local');
+}
+// Para hacer uso de esta función, se llama desde una ruta, para hacer esto primero es necesario importar la clase en la que se
+// creó la función
+ use URLModeloEnElQueSeCreóLaFunción\NombreModelo;
+
+Route::get('/url/{dato_referencia}', function($dato_referencia){
+	return NombreModeloEnElQueSeCreóLaFunción::find($dato_referencia)->nombreFunción;
+});
+
+// Relación uno a uno inverso
+// Teniendo en cuenta la información anterior (que las columnas de referencia ya existen (primary key y foreign key))
+// En el modelo al que se hace referencia se agrega la función (en este también puede aplicar lo de diferentes nombres de columnas)
+public function nombreFunción(){
+	return $this->belongsTo('URLModeloDeTablaDesdeLaQueSeHaceReferencia');
+}
+// Y se llama a esta función desde una ruta, para hacer esto primero es necesario importar la clase en la que se
+// creó la función
+use URLModeloEnElQueSeCreóLaFunción\NombreModelo;
+
+Route::get('/url/{dato_referencia}', function($dato_referencia){
+	return NonbreModeloEnElQueSeCreóLaFunción::find($dato_referencia)->nombreFunción;
+});
+
+// Uno a muchos
+// Para hacer una relación uno a muchos, sólo es necesario especificar el método en la función que se crea en el 
+// modelo desde el cual se desea hacer la referencia, en este método también aplica lo de diferentes nombres de columnas.
+// Se hace uso de la información anterior (columnnas existentes en ambas tablas, importación de clase desde la cual se
+// hace referencia, llamado a función desde ruta, etc).
+public function nombreFunción(){
+	return $this->hasMany('URLModeloDeTablaForánea\NombreModelo');
+}
+
+// Muchos a muchos (ver tablas pivote)
+
+
+####################### Tablas pivote #######################
+// Una tabla pivote sirve para crear la relación entre dos tablas
+// Para crear una tabla pivote, es necesario crear un archivo de migración con el nombre de tabla de los dos modelos
+// que se buscan relacionar, en orden alfabético y en minúsculas, ejemplo 
+php artisan make:migration create_roles_users_table --create=role_user
+// En esta tabla deberán existir dos columnas con las columnas de id de cada columna de id de cada respectiva tabla,
+// con el nombre de la tabla en singular, en minúscula y un guión bajo antecediendo el nombre de la columna id (se considera 
+// como columna id la columna con el atributo primary key), ejemplo:
+$table->integer('role_id');
+$table->integer('user_id');
+// Una vez que ha sido creada la tabla pivote, se puede crear una relación muchos a muchos entre las dos tablas seleccionadas
+// En el modelo desde el cuál se quiere obtener la información, se agrega una función con los siguientes datos
+public function roles(){
+	return $this->belongsToMany('URL\ModeloRelacion');
+}
+// Esta función puede ser llamada desde una ruta
+Route::get('/user/{id}/role', function($id){
+    $user = User::find($id);
+    return $user->name;
+});
+// Este método es para cuando todos los parámetros han sido cumplidos, en caso de que se tenga un nombre de tabla o nombres de
+
+// las columnas de los campos de id de las dos tablas que se están relacionando, esto puede ser definido en el método
+belongsToMany('URL\ModeloRelacion', 'nombre_tabla', 'nombre_columna_tabla1', 'nombre_columna_tabla2');
+
+// Con las tablas pivote se pueden relacionar dos tablas de manera sencilla, explicación:
+// Si en la tabla 'users', se tienen dos usuarios, por ejemplo, 'Pedro' y 'Pepe', y en la tabla 'roles', se tienen dos tipos
+// de roles 'Administrador' y 'Cajero', en estas dos tablas existe una columna 'id', con el atributo 'primary key'. Con todo 
+// esto se puede crear una tercer tabla para relacionar estados dos primeras tablas, a lo que se llama una tabla pivote, en esta
+// tercer tabla se crean dos columnas además de las básicas (se entiende como columnas básicas la primary key id y la de tiempos),
+// una de las columnas será en donde se ingresará la id del usuario y la otra será para su rol asignado, esto para ahorrar espacio // y hacerlo todo más limpio al obtener directamente de la tabla pivote la id de usuario y el rol asignado.
+
+// Obtener la tabla pivote
+// Para obtener la tabla pivote, simplemente se usa el parámetro '->pivot' en la ruta deseada
+Route::get('/user/role', function(){
+    $user = User::find($id);
+    return $user->roles->pivot;
+});
+// Y se le agrega el método '->withPivot("nombre_columna")', a la función en el modelo al que se accederá. Esto es en caso de que
+// se desee acceder a columnas que no sean las de id.
+
+######################### Has many trough relationship ############################
+// Esta función sirve para obtener datos de la siguiente forma:
+// Suponiendo que esta se usa en la tabla1, en la tabla1 existe una columna primary key llamada id, en una segunda tabla2 existe
+// una columna primary key llamada id y una columna tabla1_id, el cual hace referencia a la columna id de la tabla1, y en una 
+// tercera tabla3 existe una columna llamada tabla2_id, la cual hace referencia a la columna id de la tabla2:
+tabla1 -> tabla2 -> tabla3
+// La tabla1 hace referencia a la tabla2, y la tabla2 hace referencia a la tabla3, teniendo esta forma, es posible obtener
+// registros de la tabla3 directamente, mediante la función hasManyThrough(), ejemplo:
+
+// Teniendo en cuenta que se complen las condiciones anteriores, en el modelo de la que es considerada tabla1, se crea
+// la siguiente función
+public function nombreFunción(){
+	return $this->hasManyThrough('URLModelo\ModeloTabla3', 'URLModelo\Tabla2');
+}
+// La función hasManyThrough puede aceptar más parámetros, siendo estos:
+hasManyThrough('URLModelo\ModeloTabla3', 'URLModelo\Tabla2', 'nombre_columna_referencia_de_tabla2_en_tabla3', 'nombre_columna_referencia_de_tabla1_en_tabla2', 'nombre_columna_primary_key_en_tabla1');
+// Los registros de las columnas de la tabla3 pueden ser accedidas como propiedades, mediante una ruta
+$datosTabla1 = Tabla1::find($id);
+return $datosTabla1->columnaEnTabla3;
+
+########################### Polymorphic relationships ############################
+
+// Permite a un modelo pertenecer a más de un modelo en una sola asociación
+
+// Para hacer uso de esto, es necesario que el modelo que pertenecerá a varios modelos tenga
+// en la base de datos dos columnas, 'imageable_id' y 'imageable_type', estos son los nombres por 
+// defecto.
+// En el modelo que pertenecerá a varios modelos, es necesario hacer una función con el nombre
+// 'imageable' que retorne el mismo modelo y la función 'morphTo()'
+	public function imageable(){
+        return $this->morphTo();
+    }
+// En los modelos que harán uso de este modelo, es necesario definir una función que retorne
+// el mismo modelo, así como la ruta del modelo que le pertenece y el nombre de la función
+	public function ejemplo(){
+        return $this->morphMany('App\Ejemplo', 'imageable');
+    }
+
+
+
+
+
+
+
+
+
+
+
++++++++++++++++++++++++++++ Tinker +++++++++++++++++++++++++++
+// Tinker ayuda a manejar la base de datos de una manera sencilla, como cuando se busca hacer
+// pruebas. Es como una consola en la que puedes ingresar las líneas de código que
+// usarías en una ruta o modelo para manejar registros, pero directamente, sin intervención del
+// explorador de internet o algo así.
+// Los comandos como Find, Where, Delete, Update, etc, funcionan.
+// Se accede a Tinker desde la carpeta del proyecto de Laravel, con el comando 'php artisan tinker'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+############################# Laravel Collective ##########################
+// El paquete HTML de Laravel Collective contiene un generador de HTML y formas, permitiendo
+// manejar fácilmente formas en los archivos blade, del mismo modo un modelo intrincado
+// para contruir las formas.
+
+// Para integrar el paquete de formas y HTML, es necesario abrir el archivo "composer.json", del
+// proyecto al cual queremos integrar este paquete, luego ir a la web "laravelcollective.com" y
+// buscar la versión que se adapte a la versión de framework en la que está construido el proyecto.
+// En esa misma página vienen los pasos de instalación, los cuales difieren entre versiones.
+
+
+********************** Uso de formas *********************
+// Para hacer uso del generador de formas, en el archivo blade al que queremos agregar una forma,
+// es necesario agregarle la siguiente línea, para definir que lo que continúa es debe estar en 
+// una forma
+{!! Form::open() !!}
+// Para definir el final de la forma, se usa la siguiente línea
+{!! Form::close() !!}
+
+
+
+
+
+####################### Validación avanzada - Request #######################
+// Se usa para definir restricciones, como verificar si un usuario está autorizado a realizar
+// determinada acción o para requerir que campos no estén vacíos.
+// Para crear una clase de Request, es necesario escribir el siguiente comando en la terminal
+php artisan make:request NombreClaseRequest
+// La clase será creada en el directorio App\Http\Requests
+
+// En la función "authorize()", de la clase Request que creamos, se definen los algoritmos que
+// determinan si un usuario está autorizado o no. Esta clase debe retornar true si el usuario
+// sí está autorizado, o false, si no lo está.
+
+// En la función "rules()", de la clase Request que creamos, se definen los campos y reglas 
+// que deben ser requeridos, o sea, que no deben estar vacíos o que cumplan con las reglas
+// definidas, ejemplo:
+public function rules(){
+	return[
+		'nombreCampo'=>'required'
+	]
+}
+
+// Para hacer uso de esta clase, es necesario inyectarla a la variable que contiene las peticiones.
+// Ejemplo:
+public function store(NombreClaseRequest $request){
+	
+}
+
+
+
+
+
+#################### Accessors ######################
+// Sirven para manipular registros de la base de datos antes de que sean usados por un
+// método o función. Esto quiere decir que cuando un atributo de la base de datos sea 
+// llamado o insertado, primero pasará por el accessor, permitiendo manipularlo antes de mostrarlo
+// o ingresarlo a la base de datos
+
+// Para usar un accessor, es necesario crear una función en el modelo de la tabla en donde 
+// se encuentra el atributo, la función debe seguir la siguiente nomenclatura cuando
+// se obtiene un registro de la base de datos:
+public function getNombreAtributoAttribute($variable){
+	// Aquí va todo el código para modificar el registro que se almacena en '$variable'
+}
+
+// Ejemplo:
+public function getNameAttribute($value){
+        return strtoupper($value);
+}
+
+// Para usar un accessor, es necesario crear una función en el modelo de la tabla en donde 
+// se encuentra el atributo, la función debe seguir la siguiente nomenclatura cuando
+// se ingresa un registro a la base de datos:
+public function setNombreAtributoAttribute($variable){
+	// Aquí va todo el código para modificar el registro que se almacena en '$variable'
+}
+
+// Ejemplo:
+public function setNameAttribute($value){
+        $this->attributes['name'] = strtoupper($value);
+}
+
+
+
+
+###################### Query scope #######################
+// Sirve para simplificar el formateo de registros que se obtienen de una base de datos
+// Es básicamente una función estática que se crea en el modelo ligado a la tabla en la que se
+// encuentran los registros que se desean obtener y formatear.
+
+// Para usarlo es necesario crear una función estática en el modelo ligado a la tabla
+// con la que se desea trabajar, esta función debe seguir la siguiente nomenclatura:
+public static function scopeNombreFunción($variable){
+	// Código para darle formato al registro
+}
+
+// Ejemplo:
+public static function scopeUltimo($query){
+        return $query->orderBy('id', 'desc')->get();
+}
+// Y para hacer uso de esa función se llama la función con la primer letra del nombre en 
+// minúscula, sin la palabra scope
+Modelo::nombreFunción();
+
+
+
+
+
+
+
+
+
+
+####################### Laravel login #########################
+// Para usar la autentificación de login nativa de Laravel es necesario revisar la 
+// documentación.
+// En la versión de Laravel 6, se hace con un proyecto fresco y los siguientes comandos
+composer require laravel/ui --dev
+php artisan ui vue --auth
+// Esto creará todo lo necesario, tanto para iniciar sesión, como para registrar un nuevo usuario.
+// Si la vista de login y registro se muestran como html plano, es necesario ejecutar los comandos
+npm install
+npm run dev
+// Para esto, es necesario tener instalados node y npm, los cuales se pueden instalar desde
+// el instalador gráfico que se descarga en la página oficial nodejs.org
+
+
+
+
+
+
+
+########################## Middleware ################################
+// Sirve para hacer de intermediario entre la vista y el controlador, en estas clases se 
+// definen las reglas que deben seguir las peticiones, por ejemplo, no permitir queries.
+// Para crear un middleware, es necesario usar el siguiente comando:
+php artisan make:middleware NombreMiddleware
+// Este será creado en App\Http\Middleware
+// Una vez creado el middleware, es necesario registrar su ruta en las rutas de middlewares,
+// esto es en la clase Kernel.php, la cual se encuentra en \App\Http\
+// Se debe agregar una key para hacer referencia al middleware y la ruta de este, 
+// en $routeMiddleware, ejemplo:
+'isAdmin' => \App\Http\Middleware\IsAdmin::class,
+// Una vez que ha sido creado y agregado el middleware, ya es posible llamarlo, ya sea con su ruta 
+// o su key
+
+
+
+
+
+
+
+
+############################# Seedes ###########################################
+// Sirven para insertar registros automáticamente a la base de datos
+
+// Para crear un nuevo seeder, se usa el siguiente comando
+php artisan make:seeder NombreDelSeeder
+// Esto creará una nueva clase, en la ruta /database/seeds/
+// En la función 'run()' se definen las instrucciones que ejecutará el seeder
+public function run()
+    {
+        DB::table('users')->insert([
+
+            'name'=> 'nombreseedxd',
+            'email'=> 'correoseedxd@seed.com',
+            'password'=> bcrypt('secret')
+        ]);
+    }
+
+// Para que este seeder pueda ser ejecutado, es necesario definirlo en la clase
+// /database/seeds/DatabaseSeeder.php
+// Para que esta llame al seeder que creamos cuando se ejecute el comando
+// php artisan db:seed
+
+
+
+######################### Factories #############################
+// Las fábricas sirven para insertar registros a la base de datos de una manera más sencilla
+// que con seeders
+
+// Para crear una nueva fábrica, se usa el comando
+php artisan make:factory NombreFábricaFactory
+// Esto creará una nueva clase en la ruta /database/factory/
+// En esta clase se creará un objeto de tipo factory, en este objeto se escribirán los 
+// parámetros que definirán los registros a insertar a la tabla deseada (la tabla
+// deberá tener un modelo definido).
+$factory->define(NombreModelo::class, function (Faker $faker) {
+    return [
+        // Parámetros
+    ];
+});
+
+// Ejemplo:
+$factory->define(User::class, function (Faker $faker) {
+    return [
+        'name' => $faker->name,
+        'email' => $faker->unique()->safeEmail,
+        'email_verified_at' => now(),
+        'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        'remember_token' => Str::random(10),
+    ];
+});
+
+// Para hacer uso de la fábricas que creamos, se hace uso de la clase 'DatabaseSeeder.php',
+// en esta se decide la cantidad de veces que se llamará a la fábrica.
+// Para llamar a la fábrica que ya definimos, se hace uso de la función
+factory(App\NombreClase::class, númeroantidadDeVecesALlamar);
+
+// Ejemplo 
+factory(App\User::class, 10)->create();
+
+// Para ejecutar la fábrica, se usa el comando
+php artisan db:seed
+
+// Adicionalmente, se puede agregar el atributo '->each(instrucciones)', para poder
+// acceder a cada objeto de registro a crear y hacer diferentes modificaciones
+factory(App\User::class, 10)->create()->each(function($user){
+            $user -> posts()->save(factory(App\Post::class)->make());
+        });
+
+
+
+
+#################################### Components #############################
+// Son vistas que se usan como plantillas, son fáciles de usar
+// Estas vistas se tienen que crear en la carpeta 'resources/views/components/'
+// en estas vistasse define todo el html y estilos necesarios para la plantilla.
+// Las secciones en las cuales se podrá rellenar, o sea, en donde se pondrá la
+// información que no es inherente a la plantilla, se denotan con un '@yield'
+// Ejemplo:
+<!-- Page Content -->
+<div class="container">
+    <div class="row">
+        <!-- Blog Entries Column -->
+        <div class="col-md-8">
+            @yield('content')
+        </div>
+    </div>
+    <!-- /.row -->
+</div>
+
+// Para hacer uso de esta plantilla, solo es necesario, en otra vista, definir que se usará
+// el component (plantilla), de la siguiente forma '<x-nombre-de-plantilla>', luego de eso 
+// es en donde irá todo el contenido que deseemos insertar en la plantilla.
+// Para hacer referencia a la sección que definimos en la plantilla, solo se tiene que usar
+// '@section' y para terminarlo, '@endsection'.
+// Para indicar el fin del uso de la plantilla, se escribe '</x-nombre-de-plantilla>'.
+// Ejemplo, tomando en cuenta de que el nombre de la plantilla es 'home-master.blade.php':
+<x-home-master>
+@section('content')
+        <h1 class="my-4">Page Heading
+            <small>Secondary Text</small>
+        </h1>
+        <!-- Blog Post -->
+        <div class="card mb-4">
+            <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
+            <div class="card-body">
+                <h2 class="card-title">Post Title</h2>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
+                <a href="#" class="btn btn-primary">Read More &rarr;</a>
+            </div>
+            <div class="card-footer text-muted">
+                Posted on January 1, 2017 by
+                <a href="#">Start Bootstrap</a>
+            </div>
+        </div>
+@endsection
+</x-home-master>
+
+
+
+#################### Accessors y mutators ##################
+// Los mutators sirven para modificar el registro a insertar a una columna de una tabla
+// antes de que este sea ingresado a la base de datos.
+// Se declaran en el modelo de una tabla, siguiento la siguiente forma
+public function setNombreDeColumnaAttribute($value){
+	$this->attributes['NombreDeColumna'] = modificación;
+}
+// Ejemplo
+    public function setPostImageAttribute($value){
+        $this->attributes['post_image'] = asset($value);
+
+    }
+
+
+
+// Los accessors sirven para hacer modificaciones a los valores de una columna de una tabla antes
+// de que este sean mostrado.
+// Se declaran en el modelo de una tabla, siguiendo la siguiente forma
+public function getNombreDeColumnaAttribute($value){
+	return modificación;
+}
+
+// Ejemplo
+public function getPostImageAttribute($value){
+    return asset($value);
+}
+
+
+
+################### Linkear storage a la carpeta public ##################
+// En el archivo /app/config/filesystems.php, se defiden los diferentes directorios de almacenamiento,
+// por defecto, el directorio de almacenamiento es local, /app/storage/, pero hay diferentes lugares
+// en los cuales se puede ubicar, por ejemplo en el directorio público o web.
+// Para cambiar el directorio de almacenamiento, es necesario agregar la siguiente línea 
+// al archivo .env
+FILESYSTEM_DRIVER=opción
+// En donde 'opción', se define el luga en donde queremos que sea el almacenamiento,
+// las diferentes opciones se definen en /app/config/filesystems.php, siendo por defecto 'local',
+// 'public' y 's3'
+// Ejemplo:
+FILESYSTEM_DRIVER=public
+// Adicional a esto, es necesario ejecutar el comando para crear un link simbólico, esto sirve
+// para crear atajos a direcciones, estos atajos se definen en /app/config/filesystems.php, 
+// en la sección de symbolic links
+php artisan storage:link
+// de esta forma se podrá acceder al directorio de almacenamiento usando simplemente la ruta
+//  /storage/
+
+
+
+
+
+######################## Protección CSRF #####################
+// CSRF (cross-site request forgery), es un tipo de ataque que ejecuta comandos 
+// en nombre de un usuario autenticado.
+// Laravel ofrece protección contra este tipo de ataques, creando tokens únicos para cada 
+// sesión activa de usuario, este token es usado para verificar que el usuario autenticado es el que
+// está haciendo la petición a la aplicación
+// Este tipo de protección debería ser usara siempre que se use una forma HTML en la aplicación
+// Para usarla, es necesario espeficicar dentro de la forma y arriba de todo, el siguiente 
+// parámetro
+@csrf
+
+// Ejemplo
+<form method="post" action="" enctype="multipart/form-data">
+    @csrf
+    @method('DELETE')
+    <button type="submit" class="btn btn-danger">Delete</button>
+</form>
+
+
+
+
+
+
+############################ Políticas de seguridad (Policies (policy)) #########################
+// Sirve para crear permisos para acceder a ciertas acciones relacionadas con una tabla
+// Para esto, se crea una política para el modelo en específico al cual se necesita controlar
+// el acceso.
+// Se crean de la siguiente forma
+php artisan make:policy NombrePolítica --model=Modelo
+// Este comando crea una clase en la carpeta '/app/Policies/NombrePolítica', en la cual se crean funciones
+// por defecto, las cuales representan las diferentes acciones que se pueden realizar en un modelo,
+// dentro de cada función se definen los parámetros para poder acceder o no a los registros
+// Ejemplo:
+public function update(User $user, Post $post)
+{
+        return $user->id === $post->user_id;
+}
+// Esto solo permitirá modificar registros que le pertenezcan al propio usuario.
+// Ahora, solo se necesita llamar a la nueva función desde el controlador (o el blade), de 
+// la siguiente forma
+$this->authorize('update', $post);
+
+// Para su uso en Blade es de la siguiente forma
+@can('update', $post)
+	Etc
+@endcan
+
+// Para su uso en rutas
+Route::get('/admin/posts/{post}/edit', 'PostController@edit')->middleware('can:view,post')->name('post.edit');
+
+// Para su uso como booleano
+if(auth()->user()->can('edit', $post)){
+	Etc
+}
+
+
+
+
+############################### Pagination ##################################
+// La paginación de laravel sirve para mostrar información en diferentes páginas
+// Se puede usar usando la función "paginate(cantidadElementos)"
+// Ejemplo:
+public function index(){
+        //$posts = Post::all()->paginate(5);;
+        return view('admin.posts.index', ['posts'=>$posts]);
+    }
+// Esto permitirá limitar la cantidad de elementos mostrados por página a 5
+// Para añadir controles para las páginas, se puede usar 
+{{$posts->links()}}
+// Esto creará un controlador con links a las diferentes páginas que creó
+// la paginación
+// Para poder editar la paginación automática de Laravel, es necesario
+// ejecutar el siguiente comando, para poder hacer visible las clases
+// de esta
+php artisan vendor:publish
+// Esto nos dará opciones para elegir la funcionalidad a mostrar
+// la de paginación es la número 15
+// Esto creará una carpeta llamada /resources/views/vendor/pagination
+// con las clases de esta

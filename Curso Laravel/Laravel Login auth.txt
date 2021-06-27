@@ -1,0 +1,12 @@
+####################### Laravel login #########################
+// Para usar la autentificación de login nativa de Laravel es necesario revisar la 
+// documentación.
+// En la versión de Laravel 6, se hace con un proyecto fresco y los siguientes comandos
+composer require laravel/ui --dev
+php artisan ui vue --auth
+// Esto creará todo lo necesario, tanto para iniciar sesión, como para registrar un nuevo usuario.
+// Si la vista de login y registro se muestran como html plano, es necesario ejecutar los comandos
+npm install
+npm run dev
+// Para esto, es necesario tener instalados node y npm, los cuales se pueden instalar desde
+// el instalador gráfico que se descarga en la página oficial nodejs.org
